@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Home.css';
-import Header from '../../common/header/Header';
+import Login from '../../screens/login/Login';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -190,7 +190,7 @@ class Home extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <Header baseUrl={this.props.baseUrl} />
+                <Login baseUrl={this.props.baseUrl} />
 
                 <div className={classes.upcomingMoviesHeading}>
                     <span>Upcoming Movies</span>
