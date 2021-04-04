@@ -17,6 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import logo from '../../assets/logo.svg';
 
 const styles = theme => ({
     root: {
@@ -29,7 +30,7 @@ const styles = theme => ({
         padding: '8px',
         fontSize: '1rem'
     },
-    gridListUpcomingMovies: {
+    images: {
         flexWrap: 'nowrap',
         transform: 'translateZ(0)',
         width: '100%'
@@ -53,15 +54,11 @@ class Home extends Component {
     constructor() {
         super();
         this.state = {
-            movieName: "",
-            upcomingMovies: [],
-            releasedMovies: [],
-            genres: [],
-            artists: [],
-            genresList: [],
-            artistsList: [],
-            releaseDateStart: "",
-            releaseDateEnd: ""
+            imageName: "",
+            caption: [],
+            comments: [],
+            likes: "",
+            postedDate: ""
         }
     }
 
@@ -192,28 +189,38 @@ class Home extends Component {
             <div>
                 <Login baseUrl={this.props.baseUrl} />
 
-                <div className={classes.upcomingMoviesHeading}>
-                    <span>Upcoming Movies</span>
-                </div>
+                <header className="home-app-header">
+                    <div className="app-logo-text"><span>Image Viewer</span></div>
+                    <img src={logo} className="app-logo" alt="Movies App Logo" />
+                    <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="movieName">Movie Name</InputLabel>
+                        <Input id="movieName" onChange={this.movieNameChangeHandler} />
+                    </FormControl>
+                    <FormControl className={classes.formControl}>
+                        <Button onClick={() => this.filterApplyHandler()} variant="contained" color="primary">
+                            APPLY
+                        </Button>
+                    </FormControl>
+                </header>
 
-                <GridList cols={5} className={classes.gridListUpcomingMovies} >
-                    {this.state.upcomingMovies.map(movie => (
-                        <GridListTile key={"upcoming" + movie.id}>
-                            <img src={movie.poster_url} className="movie-poster" alt={movie.title} />
-                            <GridListTileBar title={movie.title} />
+                <GridList cols={2} className={classes.images} >
+                    {this.state.imageName.map(img => (
+                        <GridListTile key={"upcoming" + img.id}>
+                            <img src={img.poster_url} className="movie-poster" alt={img.title} />
+                            <GridListTileBar title={img.title} />
                         </GridListTile>
                     ))}
                 </GridList>
 
                 <div className="flex-container">
                     <div className="left">
-                        <GridList cellHeight={350} cols={4} className={classes.gridListMain}>
-                            {this.state.releasedMovies.map(movie => (
-                                <GridListTile onClick={() => this.movieClickHandler(movie.id)} className="released-movie-grid-item" key={"grid" + movie.id}>
-                                    <img src={movie.poster_url} className="movie-poster" alt={movie.title} />
+                        <GridList cellHeight={350} cols={2} className={classes.gridListMain}>
+                            {this.state.imageName.map(img => (
+                                <GridListTile onClick={() => this.movieClickHandler(img.id)} className="released-movie-grid-item" key={"grid" + img.id}>
+                                    <img src={img.poster_url} className="movie-poster" alt={img.title} />
                                     <GridListTileBar
-                                        title={movie.title}
-                                        subtitle={<span>Release Date: {new Date(movie.release_date).toDateString()}</span>}
+                                        title={img.title}
+                                        subtitle={<span>Release Date: {new Date(img.posted_date).toDateString()}</span>}
                                     />
                                 </GridListTile>
                             ))}
