@@ -15,7 +15,12 @@
 }
 
 .login-card{
-    text-align: center;
+    text-align: left;
+    width: 30%;
+    margin-top: 1%;
+    margin-left: 33%;
+    margin-right: 33%;
+    padding-left: 2%;
 }
 
 .bookshow-button {

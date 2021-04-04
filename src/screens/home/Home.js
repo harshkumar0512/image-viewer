@@ -58,7 +58,8 @@ class Home extends Component {
             caption: [],
             comments: [],
             likes: "",
-            postedDate: ""
+            postedDate: "",
+            poster_url: ""
         }
     }
 
@@ -173,7 +174,7 @@ class Home extends Component {
         xhrFilter.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    releasedMovies: JSON.parse(this.responseText).movies
+                    releasedMovies: JSON.parse(this.responseText).imageName
                 });
             }
         });
@@ -203,15 +204,6 @@ class Home extends Component {
                     </FormControl>
                 </header>
 
-                <GridList cols={2} className={classes.images} >
-                    {this.state.imageName.map(img => (
-                        <GridListTile key={"upcoming" + img.id}>
-                            <img src={img.poster_url} className="movie-poster" alt={img.title} />
-                            <GridListTileBar title={img.title} />
-                        </GridListTile>
-                    ))}
-                </GridList>
-
                 <div className="flex-container">
                     <div className="left">
                         <GridList cellHeight={350} cols={2} className={classes.gridListMain}>
@@ -220,7 +212,7 @@ class Home extends Component {
                                     <img src={img.poster_url} className="movie-poster" alt={img.title} />
                                     <GridListTileBar
                                         title={img.title}
-                                        subtitle={<span>Release Date: {new Date(img.posted_date).toDateString()}</span>}
+                                        subtitle={<span>Release Date: {new Date(img.postedDate).toDateString()}</span>}
                                     />
                                 </GridListTile>
                             ))}

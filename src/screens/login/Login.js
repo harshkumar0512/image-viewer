@@ -21,8 +21,8 @@ const customStyles = {
     }
 };
 
-const user_Name = 'harsh';
-const pass = 'kumar';
+const user_Name = "harsh";
+const pass = "kumar";
 const access_token = '';
 
 const TabContainer = function (props) {
@@ -47,16 +47,7 @@ class Login extends Component {
             username: "",
             loginPasswordRequired: "dispNone",
             loginPassword: "",
-            firstnameRequired: "dispNone",
-            firstname: "",
-            lastnameRequired: "dispNone",
-            lastname: "",
-            emailRequired: "dispNone",
-            email: "",
-            registerPasswordRequired: "dispNone",
-            registerPassword: "",
-            contactRequired: "dispNone",
-            contact: "",
+            validCred:"dispNone",
             registrationSuccess: false,
             loggedIn: sessionStorage.getItem("access-token") == null ? false : true
         }
@@ -65,13 +56,17 @@ class Login extends Component {
     loginClickHandler = () => {
         this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
         this.state.loginPassword === "" ? this.setState({ loginPasswordRequired: "dispBlock" }) : this.setState({ loginPasswordRequired: "dispNone" });
+        if(this.state.username !== "" && this.state.loginPassword !== ""){
+            this.state.validCred === (this.state.username.toString()=== user_Name && this.state.loginPassword.toString() === pass)
+                ? this.setState({ validCred: "dispNone" }) : this.setState({ validCred: "dispBlock" });
+        }
+
 
         let dataLogin = null;
         let xhrLogin = new XMLHttpRequest();
         let that = this;
-        if(this.state.username === user_Name && this.state.loginPassword === pass){
-            xhrLogin.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
+        xhrLogin.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
                     sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
                     sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
 
@@ -80,20 +75,13 @@ class Login extends Component {
                     });
 
                 }
-            });
+        });
 
-            xhrLogin.open("POST", this.props.baseUrl + "auth/login");
-            xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.username + ":" + this.state.loginPassword));
-            xhrLogin.setRequestHeader("Content-Type", "application/json");
-            xhrLogin.setRequestHeader("Cache-Control", "no-cache");
-            xhrLogin.send(dataLogin);
-        }else{
-
-            that.setState({
-                loggedIn: false
-            });
-
-        }
+        xhrLogin.open("POST", this.props.baseUrl + "auth/login");
+        xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.username + ":" + this.state.loginPassword));
+        xhrLogin.setRequestHeader("Content-Type", "application/json");
+        xhrLogin.setRequestHeader("Cache-Control", "no-cache");
+        xhrLogin.send(dataLogin);
 
     }
 
@@ -122,12 +110,12 @@ class Login extends Component {
                     <div className="app-logo-text"><span>Image Viewer</span></div>
                 </header>
                 {!this.state.loggedIn ?
-                    <div className="login-card">
-                        <Card>
+
+                        <Card className="login-card">
                             <CardContent>
                                 <FormControl >
                                     <Typography style={customStyles} color="textSecondary">
-                                        LOGIN:
+                                        LOGIN
                                     </Typography>
                                 </FormControl>
 
@@ -147,6 +135,9 @@ class Login extends Component {
                                     <FormHelperText className={this.state.loginPasswordRequired}>
                                         <span className="red">required</span>
                                     </FormHelperText>
+                                    <FormHelperText className={this.state.validCred}>
+                                        <span className="red">Incorrect username and/or password</span>
+                                    </FormHelperText>
                                 </FormControl>
 
                                 <br /><br />
@@ -157,12 +148,11 @@ class Login extends Component {
                                     </span>
                                 </FormControl>
                                 }
-                                <br /><br />
+                                <br></br>
                                 <Button variant="contained" color="primary" onClick={this.loginClickHandler}>LOGIN</Button>
 
                             </CardContent>
                         </Card>
-                    </div>
 
                     :
                     <div className="login-button">
