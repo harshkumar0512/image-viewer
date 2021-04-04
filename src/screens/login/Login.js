@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import {FormHelperText} from "@material-ui/core";
+import Home from "../home/Home";
 
 const customStyles = {
     content: {
@@ -23,7 +24,7 @@ const customStyles = {
 
 const user_Name = "harsh";
 const pass = "kumar";
-const access_token = '';
+const access_token = "IGQVJWT2ZAkTm1sRUl5elZAmOW5iRkxjNE5HcUVUNnFRTlp4ZAldBVnA2YTZAQSmVZASTZALaGhOZAkRCSkE5UnM5Vmgwek5hYmw0NnVTUE16Q0dxLTBkZAXJueV95Qi1kemo3c21BeVFJaU9sR3JDYlhuVWxKTFk5a1lGWTM3VE1v";
 
 const TabContainer = function (props) {
     return (
@@ -57,31 +58,32 @@ class Login extends Component {
         this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
         this.state.loginPassword === "" ? this.setState({ loginPasswordRequired: "dispBlock" }) : this.setState({ loginPasswordRequired: "dispNone" });
         if(this.state.username !== "" && this.state.loginPassword !== ""){
-            this.state.validCred === (this.state.username.toString()=== user_Name && this.state.loginPassword.toString() === pass)
+            this.state.validCred === (this.state.username.toString()=== user_Name.toString() && this.state.loginPassword.toString() === pass.toString())
                 ? this.setState({ validCred: "dispNone" }) : this.setState({ validCred: "dispBlock" });
         }
 
 
-        let dataLogin = null;
-        let xhrLogin = new XMLHttpRequest();
+        //let dataLogin = null;
+        //let xhrLogin = new XMLHttpRequest();
         let that = this;
-        xhrLogin.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                    sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
-                    sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
+        console.log(this.state.username.toString()=== user_Name.toString());
+        console.log(this.state.loginPassword.toString() === pass.toString());
+            if (this.state.username.toString()=== user_Name.toString() && this.state.loginPassword.toString() === pass.toString()) {
+                    //sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
+                    //sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
+                sessionStorage.setItem("access-token", access_token);
 
                     that.setState({
                         loggedIn: true
                     });
 
                 }
-        });
 
-        xhrLogin.open("POST", this.props.baseUrl + "auth/login");
-        xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.username + ":" + this.state.loginPassword));
-        xhrLogin.setRequestHeader("Content-Type", "application/json");
-        xhrLogin.setRequestHeader("Cache-Control", "no-cache");
-        xhrLogin.send(dataLogin);
+        //xhrLogin.open("POST", this.props.baseUrl + "auth/login");
+        //xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.username + ":" + this.state.loginPassword));
+        //xhrLogin.setRequestHeader("Content-Type", "application/json");
+        //xhrLogin.setRequestHeader("Cache-Control", "no-cache");
+        //xhrLogin.send(dataLogin);
 
     }
 
@@ -155,10 +157,8 @@ class Login extends Component {
                         </Card>
 
                     :
-                    <div className="login-button">
-                        <Button variant="contained" color="default" onClick={this.logoutHandler}>
-                            Logout
-                        </Button>
+                    <div >
+                            <Home/>
                     </div>
                 }
             </div>
