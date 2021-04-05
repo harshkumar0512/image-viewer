@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './Home.css';
 import Header from '../../common/header/Header';
 import Card from '@material-ui/core/Card';
@@ -13,7 +13,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 
@@ -29,7 +29,7 @@ class Home extends Component {
         this.state = {
             liked: false,
             comment: "",
-            comments: ["", "", "", "", "", "", "", ""],
+            comments: [],
             loggedIn
         }
     }
@@ -41,7 +41,7 @@ class Home extends Component {
     commentChangeHandler = (pos, e) => {
         let interim = this.state.comments
         interim[pos] = e.target.value
-        this.setState({ comments: interim })
+        this.setState({comments: interim})
     }
 
     addComment = (pos) => {
@@ -50,7 +50,7 @@ class Home extends Component {
         }
         let interim = this.state.comments
         interim[pos] = ""
-        this.setState({ comments: interim })
+        this.setState({comments: interim})
     }
 
     render() {
@@ -80,7 +80,7 @@ class Home extends Component {
         return (
             <div>
                 {this.state.loggedIn === false ?
-                    <Redirect to="/" />
+                    <Redirect to="/"/>
                     :
                     <div className="mainContainer">
                         <Header dispalySearchBar={true}
@@ -112,18 +112,19 @@ class Home extends Component {
                                                 <Card key={post.id} id={post.id} className="cardStyle">
                                                     <div>
                                                         <CardHeader className="CardHead" avatar={
-                                                            <Avatar className="CardHeadAvatar" src={logo} sizes="small" />
+                                                            <Avatar className="CardHeadAvatar" src={logo}
+                                                                    sizes="small"/>
                                                         }
                                                                     title={interimusername}
-                                                                    subheader={interimDate + "/" + interimMonth + "/" + interimYear + " " + interimHour + ":" + interimMin + ":" + interimSec} />
+                                                                    subheader={interimDate + "/" + interimMonth + "/" + interimYear + " " + interimHour + ":" + interimMin + ":" + interimSec}/>
                                                     </div>
                                                     <div className="CardContent">
                                                         <CardContent>
                                                             <div className="CardContentImage">
                                                                 <img className="image" src={interimSrc}
-                                                                     alt={post.caption} />
+                                                                     alt={post.caption}/>
                                                             </div>
-                                                            < hr />
+                                                            < hr/>
                                                             <div className="ImageDetails">
                                                                 <div className="Caption"><Typography
                                                                     variant="h5">{post.caption}</Typography></div>
@@ -142,14 +143,14 @@ class Home extends Component {
                                                                     this.props.likeDetails[counter - 1] ?
                                                                         <div className="PostLikeSection"><Favorite
                                                                             id={2}
-                                                                            style={{ color: "red" }}
+                                                                            style={{color: "red"}}
                                                                             className="likeButton"
-                                                                            onClick={this.likeClickhandler.bind(this, counter - 1)} /><span>{likeNumber + 1} likes</span>
+                                                                            onClick={this.likeClickhandler.bind(this, counter - 1)}/><span>{likeNumber + 1} likes</span>
                                                                         </div> :
                                                                         <div className="PostLikeSection">
                                                                             <FavoriteBorderIcon
                                                                                 id={2} className="PostLikeButton"
-                                                                                onClick={this.likeClickhandler.bind(this, counter - 1)} /><span>{likeNumber} likes</span>
+                                                                                onClick={this.likeClickhandler.bind(this, counter - 1)}/><span>{likeNumber} likes</span>
                                                                         </div>
                                                                 }
                                                             </div>
@@ -180,7 +181,7 @@ class Home extends Component {
                                                                                 <Input id={"input" + commentsValue}
                                                                                        type="text"
                                                                                        value={this.state.comments[commentsValue - 1]}
-                                                                                       onChange={this.commentChangeHandler.bind(this, commentsValue - 1)} />
+                                                                                       onChange={this.commentChangeHandler.bind(this, commentsValue - 1)}/>
                                                                             </FormControl>
                                                                             <Button className="AddNewComment"
                                                                                     variant="contained" color="primary"

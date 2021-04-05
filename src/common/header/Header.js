@@ -7,7 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Input from '@material-ui/core/Input';
 import logo from '../../assets/logo.svg';
 import Avatar from '@material-ui/core/Avatar';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const Header = (props) => {
 
@@ -33,7 +33,7 @@ const Header = (props) => {
         <div className="header unselectable">
             <div className="innerHeader" to="/home">
                 {window.location.pathname === "/profile" ?
-                    <Link to={"/home"} className="logo" style={{ textDecoration: "none" }}>
+                    <Link to={"/home"} className="logo" style={{textDecoration: "none"}}>
                         Image Viewer
                     </Link> :
                     <div className="logo">
@@ -43,9 +43,9 @@ const Header = (props) => {
                 <div className="loggedInUserOptions">
                     {props.dispalySearchBar && <div className="search">
                         <div className="searchIcon">
-                            <SearchIcon />
+                            <SearchIcon/>
                         </div>
-                        <Input disableUnderline={true} placeholder="Search…" onChange={searchItems} />
+                        <Input disableUnderline={true} placeholder="Search…" onChange={searchItems}/>
                     </div>}
                     {props.displayUserProfileIcon && <div>
                         <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} size="small">
@@ -56,14 +56,14 @@ const Header = (props) => {
                                 id="profileMenu"
                                 anchorEl={anchorEl}
                                 getContentAnchorEl={null}
-                                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                                anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+                                transformOrigin={{vertical: "top", horizontal: "center"}}
                                 keepMounted
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
                                 <MenuItem component={Link} to={"/profile"} onClick={handleClose}>My Account</MenuItem>
-                                <hr className="menuItemSeperator" />
+                                <hr className="menuItemSeperator"/>
                                 <MenuItem component={Link} to={"/"} onClick={() => {
                                     handleClose();
                                     logOutHandler();
@@ -74,8 +74,8 @@ const Header = (props) => {
                                 id="profileMenu"
                                 anchorEl={anchorEl}
                                 getContentAnchorEl={null}
-                                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                                anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+                                transformOrigin={{vertical: "top", horizontal: "center"}}
                                 keepMounted
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}

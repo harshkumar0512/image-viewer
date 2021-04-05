@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Login from './login/Login';
 import Home from './home/Home';
 import Profile from "./profile/Profile";
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 class Controller extends Component {
     constructor() {
@@ -14,27 +14,27 @@ class Controller extends Component {
                 url2: "?fields=id,media_type,media_url,username,timestamp&access_token="
             },
             /* Please change the access token to the User Access Token*/
-            accessToken: "IGQVJWU1JYSDlXZAFpMZAGxKNlZAMazI0QXowcURwalhKTTZAXYVlINWVqQ2JPVTRreHgyQmhTRk5rT2F6ZAzRvVEpGWVNmaWdWXzFmeGY2Q2NhcGxlUnpJUnlmZAFFVWS02T09FTVRXbUVfN3dDX0trVTF5d3FOMEY2alFmSWNn",
+            accessToken: "IGQVJWWHNOT181UWhxemp4cjd1dUM3ZAGlEZAjVMdnlDeXE1M3FVVzFPN3ExZA1dadDBkTF81WWZAfTUduX3FrdlVQS3h0ZAWhTZAHNUaWhqWVBVOVRFSmJBSlVRYlBGa2ltQUFLMm5DN3hFTUJYMzBGaHMxbzdoY1F6RW93V0Jn",
             username: "",
             usernameSet: false,
             posts: [],
             filteredPosts: [],
             showFilteredPosts: false,
             tempList: [],
-            likeList: [...Array(8)].map(() => Math.floor(Math.random() * 20)),
-            likeDetails: new Array(8).fill(false),
-            follows: Math.floor(Math.random() * 20),
-            followedBy: Math.floor(Math.random() * 20),
-            commentsList: this.commentGenerator(100),
-            tagsList: this.tagGenerator(100)
+            likeList: [...Array(4)].map(() => Math.floor(Math.random() * 5)),
+            likeDetails: new Array(4).fill(false),
+            follows: Math.floor(Math.random() * 5),
+            followedBy: Math.floor(Math.random() * 5),
+            commentsList: this.commentGenerator(20),
+            tagsList: this.tagGenerator(20)
         }
 
     }
 
-// Sample Comment function
-    makeComment(length) {
+// Sample generator Comment function
+    sampleCommentGenerator(length) {
         var result = '';
-        var characters =['Good','Nice','lovely','amazing','cool','excellent']
+        var characters = ['Sample', 'Comments']
         var charactersLength = characters.length;
         for (var i = 0; i < length; i++) {
             result += ' ' + characters[(Math.floor(Math.random() * charactersLength))];
@@ -45,7 +45,7 @@ class Controller extends Component {
     commentGenerator(numberOfPost) {
         let tempCommentList = {}
         for (let i = 0; i < numberOfPost; i++) {
-            let tempArray = [...Array(1 + Math.floor(Math.random() * 5))].map(() => this.makeComment(1 + Math.floor(Math.random() * 20)));
+            let tempArray = [...Array(1 + Math.floor(Math.random() * 5))].map(() => this.sampleCommentGenerator(1 + Math.floor(Math.random() * 5)));
             tempCommentList["input" + i] = tempArray;
         }
         return tempCommentList;
@@ -54,7 +54,7 @@ class Controller extends Component {
     tagGenerator(numberOfPost) {
         let tempTagList = {}
         for (let i = 0; i < numberOfPost; i++) {
-            let tempArray = [...Array(1 + Math.floor(Math.random() * 5))].map(() => "#" + this.makeComment(1 + Math.floor(Math.random() * 20)));
+            let tempArray = [...Array(1 + Math.floor(Math.random() * 5))].map(() => "#" + this.sampleCommentGenerator(1 + Math.floor(Math.random() * 5)));
             tempTagList["input" + i] = tempArray;
         }
         return tempTagList;
@@ -115,27 +115,27 @@ class Controller extends Component {
     }
 
     filterCaptionsBySearch = (str) => {
-        this.setState({ filteredPosts: this.state.posts })
-        str.trim().length > 0 ? this.setState({ showFilteredPosts: true }) : this.setState({ showFilteredPosts: false })
+        this.setState({filteredPosts: this.state.posts})
+        str.trim().length > 0 ? this.setState({showFilteredPosts: true}) : this.setState({showFilteredPosts: false})
         let temp = this.state.posts;
         let filtered = temp.filter(post => {
             return post.caption.toLowerCase().includes(str.trim().toLowerCase())
         })
-        this.setState({ filteredPosts: filtered })
+        this.setState({filteredPosts: filtered})
     }
 
     updatedLikeDetails = (id) => {
         let temp = this.state.likeDetails
         temp[id] ? temp[id] = false : temp[id] = true
-        this.setState({ likeDetails: temp })
-        this.setState({ usernameSet: true })
+        this.setState({likeDetails: temp})
+        this.setState({usernameSet: true})
     }
 
 
     addNewComments = (num, comment) => {
         let temp = this.state.commentsList
         temp[Object.keys(temp)[num]].push(comment)
-        this.setState({ commentsList: temp })
+        this.setState({commentsList: temp})
     }
 
     render() {
@@ -151,7 +151,7 @@ class Controller extends Component {
                 <div>
 
                     <Route exact path='/'>
-                        <Login accessToken={this.state.accessToken} />
+                        <Login accessToken={this.state.accessToken}/>
                     </Route>
                     <Route exact path={'/home'}>
                         <Home loggedIn={this.state.loggedIn}
@@ -165,7 +165,7 @@ class Controller extends Component {
                               posts={this.state.posts}
                               filterCaptionsBySearch={this.filterCaptionsBySearch}
                               postDetails={postDetails}
-                              likeList={this.state.likeList} />
+                              likeList={this.state.likeList}/>
                     </Route>
                     <Route exact path={'/profile'}>
                         <Profile loggedIn={this.state.loggedIn}
@@ -178,7 +178,7 @@ class Controller extends Component {
                                  postDetails={postDetails}
                                  likeList={this.state.likeList}
                                  followedBy={this.state.followedBy}
-                                 follows={this.state.follows} />
+                                 follows={this.state.follows}/>
                     </Route>
                 </div>
             </Router>

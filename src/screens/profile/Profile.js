@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './Profile.css';
 import Header from '../../common/header/Header';
 import logo from '../../assets/logo.svg';
@@ -16,13 +16,15 @@ import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Favorite from '@material-ui/icons/Favorite';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
+
+const accessToken = sessionStorage.getItem("access-token");
 
 class Profile extends Component {
 
     constructor(props) {
         super();
-        const accessToken = sessionStorage.getItem("access-token")
+
         let loggedIn = true
         if (accessToken === null) {
             loggedIn = false
@@ -35,7 +37,7 @@ class Profile extends Component {
             postCaption: "",
             modalIsOpen: false,
             PostModalIsOpen: false,
-            realName: "Harsh kumar",
+            realName: "Harsh",
             updatedName: "",
             newName: "",
             updatedNameRequired: "dispNone",
@@ -48,51 +50,51 @@ class Profile extends Component {
     }
 
     openModel = () => {
-        this.setState({ modalIsOpen: true })
+        this.setState({modalIsOpen: true})
     }
 
     closeModal = () => {
-        this.setState({ modalIsOpen: false })
-        this.setState({ updatedNameRequired: "dispNone" })
+        this.setState({modalIsOpen: false})
+        this.setState({updatedNameRequired: "dispNone"})
     }
 
     updateUserName = () => {
         if (this.state.updatedName.trim().length === 0) {
-            this.setState({ updatedNameRequired: "dispBlock" })
+            this.setState({updatedNameRequired: "dispBlock"})
         } else {
-            this.setState({ realName: this.state.updatedName, updatedNameRequired: "dispNone" })
-            this.setState({ updatedName: "" })
+            this.setState({realName: this.state.updatedName, updatedNameRequired: "dispNone"})
+            this.setState({updatedName: ""})
             this.closeModal();
         }
     }
 
     newNameHandler = (e) => {
-        this.setState({ updatedName: e.target.value })
+        this.setState({updatedName: e.target.value})
     }
 
     openPostModel = (caption, url, user, likes, liked, counter) => {
-        this.setState({ PostModalIsOpen: true })
-        this.setState({ postCaption: caption })
-        this.setState({ modalSrc: url })
-        this.setState({ username: user })
-        this.setState({ likeCounter: likes })
-        this.setState({ liked: liked })
-        this.setState({ counter: counter })
+        this.setState({PostModalIsOpen: true})
+        this.setState({postCaption: caption})
+        this.setState({modalSrc: url})
+        this.setState({username: user})
+        this.setState({likeCounter: likes})
+        this.setState({liked: liked})
+        this.setState({counter: counter})
     }
 
     closePostModal = () => {
-        this.setState({ PostModalIsOpen: false })
+        this.setState({PostModalIsOpen: false})
     }
 
     likeButtonHandler = () => {
-        this.state.liked ? this.setState({ liked: false }) : this.setState({ liked: true })
+        this.state.liked ? this.setState({liked: false}) : this.setState({liked: true})
         this.props.updatedLikeDetails(this.state.counter)
     }
 
     NewCommentHandler = (pos, e) => {
         let interim = this.state.comments
         interim[pos] = e.target.value
-        this.setState({ comments: interim })
+        this.setState({comments: interim})
     }
 
     addNewComment = (pos) => {
@@ -101,7 +103,7 @@ class Profile extends Component {
         }
         let interim = this.state.comments
         interim[pos] = ""
-        this.setState({ comments: interim })
+        this.setState({comments: interim})
     }
 
     render() {
@@ -121,17 +123,17 @@ class Profile extends Component {
         return (
             <div>
                 {this.state.loggedIn === false ?
-                    <Redirect to="/" />
+                    <Redirect to="/"/>
                     :
                     <div>
-                        <Header displayUserProfileIcon={true} />
+                        <Header displayUserProfileIcon={true}/>
                         <div className="ProfilePage">
                             <div className="UserProfileContainer">
                                 <div className="OuterDiv">
                                     <div className="InnerDiv">
                                         <div>
                                             <img className="UserProfilePhoto" src={logo}
-                                                alt="profile" />
+                                                 alt="profile"/>
                                         </div>
                                         <div className="UserAccountDetails">
                                             <div>
@@ -156,7 +158,7 @@ class Profile extends Component {
                                                 </div>
                                                 <div className="EditName">
                                                     <Fab color="secondary" aria-label="edit" onClick={this.openModel}>
-                                                        <EditIcon />
+                                                        <EditIcon/>
                                                     </Fab>
                                                     <Modal
                                                         className="ProfileModal"
@@ -172,12 +174,12 @@ class Profile extends Component {
                                                             <div>
                                                                 <Typography variant="h6">Edit</Typography>
                                                             </div>
-                                                            <br />
+                                                            <br/>
                                                             <div>
                                                                 <FormControl required>
                                                                     <InputLabel>Full Name</InputLabel>
                                                                     <Input id="newName" type="text"
-                                                                        onChange={this.newNameHandler} />
+                                                                           onChange={this.newNameHandler}/>
                                                                     <FormHelperText
                                                                         className={this.state.updatedNameRequired}>
                                                                         <span
@@ -185,10 +187,10 @@ class Profile extends Component {
                                                                     </FormHelperText>
                                                                 </FormControl>
                                                             </div>
-                                                            <br /><br />
+                                                            <br/><br/>
                                                             <div>
                                                                 <Button variant="contained" color="primary"
-                                                                    onClick={this.updateUserName}>
+                                                                        onClick={this.updateUserName}>
                                                                     UPDATE
                                                                 </Button>
                                                             </div>
@@ -214,7 +216,7 @@ class Profile extends Component {
                                                 })
                                                 return <GridListTile key={post.id} className="GridTile">
                                                     <img src={interimsrc} alt={post.caption}
-                                                        onClick={this.openPostModel.bind(this, post.caption, interimsrc, interimUsername, likeNumber, likeStatus, counter - 1)} />
+                                                         onClick={this.openPostModel.bind(this, post.caption, interimsrc, interimUsername, likeNumber, likeStatus, counter - 1)}/>
                                                 </GridListTile>
                                             })}
                                         </GridList>
@@ -232,16 +234,16 @@ class Profile extends Component {
                                                 <div className="ProfilePageModal">
                                                     <div className="leftDivSection">
                                                         <img className="postImage" src={this.state.modalSrc}
-                                                            alt="alternate" />
+                                                             alt="alternate"/>
                                                     </div>
                                                     <div className="rightDivSection">
                                                         <div className="ModalUserDetails">
                                                             <img className="ProfilePhotoModal" src={logo}
-                                                                alt="profilePic" />
+                                                                 alt="profilePic"/>
                                                             <Typography className="UserNameModal"
-                                                                variant="h6">{this.state.username}</Typography>
+                                                                        variant="h6">{this.state.username}</Typography>
                                                         </div>
-                                                        <hr />
+                                                        <hr/>
                                                         <Typography variant="h5">{this.state.postCaption}</Typography>
                                                         <div className="TagsSection">
                                                             {
@@ -272,16 +274,16 @@ class Profile extends Component {
                                                                     <div>
                                                                         {
                                                                             this.state.liked ? <div
-                                                                                className="likeSectionInProfilePage">
-                                                                                <Favorite id={2} style={{ color: "red" }}
-                                                                                    className="likeButton"
-                                                                                    onClick={this.likeButtonHandler} /><span>{this.state.likeCounter + 1} likes</span>
-                                                                            </div> :
+                                                                                    className="likeSectionInProfilePage">
+                                                                                    <Favorite id={2} style={{color: "red"}}
+                                                                                              className="likeButton"
+                                                                                              onClick={this.likeButtonHandler}/><span>{this.state.likeCounter + 1} likes</span>
+                                                                                </div> :
                                                                                 <div
                                                                                     className="likeSectionInProfilePage">
                                                                                     <FavoriteBorderIcon id={2}
-                                                                                        className="likeButton"
-                                                                                        onClick={this.likeButtonHandler} /><span>{this.state.likeCounter} likes</span>
+                                                                                                        className="likeButton"
+                                                                                                        onClick={this.likeButtonHandler}/><span>{this.state.likeCounter} likes</span>
                                                                                 </div>
                                                                         }
                                                                     </div>
@@ -290,12 +292,12 @@ class Profile extends Component {
                                                                             <InputLabel htmlFor={"input" + counter}>Add
                                                                                 a comment</InputLabel>
                                                                             <Input id={"input" + counter} type="text"
-                                                                                value={this.state.comments[this.state.counter]}
-                                                                                onChange={this.NewCommentHandler.bind(this, this.state.counter)} />
+                                                                                   value={this.state.comments[this.state.counter]}
+                                                                                   onChange={this.NewCommentHandler.bind(this, this.state.counter)}/>
                                                                         </FormControl>
                                                                         <Button className="addCommentButton"
-                                                                            variant="contained" color="primary"
-                                                                            onClick={this.addNewComment.bind(this, this.state.counter)}>
+                                                                                variant="contained" color="primary"
+                                                                                onClick={this.addNewComment.bind(this, this.state.counter)}>
                                                                             ADD
                                                                         </Button>
                                                                     </div>
