@@ -14,12 +14,16 @@
     float: right;
 }
 
+.login-input{
+    width: 100%;
+}
+
 .login-card{
     text-align: left;
-    width: 30%;
+    width: 20%;
     margin-top: 1%;
-    margin-left: 33%;
-    margin-right: 33%;
+    margin-left: 40%;
+    margin-right: 40%;
     padding-left: 2%;
 }
 

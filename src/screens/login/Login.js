@@ -10,6 +10,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import {FormHelperText} from "@material-ui/core";
 import Home from "../home/Home";
+import { Link, Redirect } from 'react-router-dom';
 
 const customStyles = {
     content: {
@@ -66,8 +67,7 @@ class Login extends Component {
         //let dataLogin = null;
         //let xhrLogin = new XMLHttpRequest();
         let that = this;
-        console.log(this.state.username.toString()=== user_Name.toString());
-        console.log(this.state.loginPassword.toString() === pass.toString());
+
             if (this.state.username.toString()=== user_Name.toString() && this.state.loginPassword.toString() === pass.toString()) {
                     //sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
                     //sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
@@ -124,7 +124,7 @@ class Login extends Component {
                                 <br /><br />
                                 <FormControl required>
                                     <InputLabel htmlFor="username">Username</InputLabel>
-                                    <Input id="username" type="text" username={this.state.username} onChange={this.inputUsernameChangeHandler} />
+                                    <Input id="username" type="text" className="login-input" username={this.state.username} onChange={this.inputUsernameChangeHandler} />
                                     <FormHelperText className={this.state.usernameRequired}>
                                         <span className="red">required</span>
                                     </FormHelperText>
@@ -133,7 +133,7 @@ class Login extends Component {
                                 <br /><br />
                                 <FormControl required>
                                     <InputLabel htmlFor="loginPassword">Password</InputLabel>
-                                    <Input id="loginPassword" type="password" loginpassword={this.state.loginPassword} onChange={this.inputLoginPasswordChangeHandler} />
+                                    <Input id="loginPassword" type="password" className="login-input" loginpassword={this.state.loginPassword} onChange={this.inputLoginPasswordChangeHandler} />
                                     <FormHelperText className={this.state.loginPasswordRequired}>
                                         <span className="red">required</span>
                                     </FormHelperText>
@@ -157,9 +157,7 @@ class Login extends Component {
                         </Card>
 
                     :
-                    <div >
-                            <Home/>
-                    </div>
+                        <Redirect to="/home" />
                 }
             </div>
         )
