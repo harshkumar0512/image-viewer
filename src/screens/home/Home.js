@@ -39,33 +39,33 @@ class Home extends Component {
     }
 
     commentChangeHandler = (pos, e) => {
-        let interim = this.state.comments
-        interim[pos] = e.target.value
-        this.setState({comments: interim})
+        let post = this.state.comments
+        post[pos] = e.target.value
+        this.setState({comments: post})
     }
 
     addComment = (pos) => {
         if (this.state.comments[pos].trim() !== "") {
             this.props.addNewComments(pos, this.state.comments[pos])
         }
-        let interim = this.state.comments
-        interim[pos] = ""
-        this.setState({comments: interim})
+        let post = this.state.comments
+        post[pos] = ""
+        this.setState({comments: post})
     }
 
     render() {
 
-        let interim = 0
+        let post = 0
 
-        let interimusername = ""
-        let interimSrc
-        let interimTimeStamp
-        let interimDate
-        let interimMonth
-        let interimYear
-        let interimHour
-        let interimMin
-        let interimSec
+        let postusername = ""
+        let postSrc
+        let postTimeStamp
+        let postDate
+        let postMonth
+        let postYear
+        let postHour
+        let postMin
+        let postSec
         let likeNumber
         let counter = 0
         let commentsValue = 0
@@ -97,15 +97,15 @@ class Home extends Component {
                                             counter++
                                             this.props.postDetails.forEach(thispost => {
                                                 if (thispost.id === post.id) {
-                                                    interimusername = thispost.username
-                                                    interimSrc = thispost.media_url
-                                                    interimTimeStamp = new Date(thispost.timestamp)
-                                                    interimDate = interimTimeStamp.getDate()
-                                                    interimMonth = interimTimeStamp.getMonth() + 1
-                                                    interimYear = interimTimeStamp.getFullYear()
-                                                    interimHour = interimTimeStamp.getHours()
-                                                    interimMin = interimTimeStamp.getMinutes()
-                                                    interimSec = interimTimeStamp.getSeconds()
+                                                    postusername = thispost.username
+                                                    postSrc = thispost.media_url
+                                                    postTimeStamp = new Date(thispost.timestamp)
+                                                    postDate = postTimeStamp.getDate()
+                                                    postMonth = postTimeStamp.getMonth() + 1
+                                                    postYear = postTimeStamp.getFullYear()
+                                                    postHour = postTimeStamp.getHours()
+                                                    postMin = postTimeStamp.getMinutes()
+                                                    postSec = postTimeStamp.getSeconds()
                                                 }
                                             });
                                             return <GridListTile key={post.id}>
@@ -115,13 +115,13 @@ class Home extends Component {
                                                             <Avatar className="CardHeadAvatar" src={logo}
                                                                     sizes="small"/>
                                                         }
-                                                                    title={interimusername}
-                                                                    subheader={interimDate + "/" + interimMonth + "/" + interimYear + " " + interimHour + ":" + interimMin + ":" + interimSec}/>
+                                                                    title={postusername}
+                                                                    subheader={postDate + "/" + postMonth + "/" + postYear + " " + postHour + ":" + postMin + ":" + postSec}/>
                                                     </div>
                                                     <div className="CardContent">
                                                         <CardContent>
                                                             <div className="CardContentImage">
-                                                                <img className="image" src={interimSrc}
+                                                                <img className="image" src={postSrc}
                                                                      alt={post.caption}/>
                                                             </div>
                                                             < hr/>
@@ -131,9 +131,9 @@ class Home extends Component {
                                                                 <div className="Tags" {...tagValue++}>
                                                                     {
                                                                         this.props.tagsList[Object.keys(tagsList)[tagValue - 1]].map(tag => {
-                                                                            interim++
+                                                                            post++
                                                                             return <span
-                                                                                key={"tag" + interim}>{tag}&nbsp;</span>
+                                                                                key={"tag" + post}>{tag}&nbsp;</span>
                                                                         })
                                                                     }
                                                                 </div>
@@ -161,11 +161,11 @@ class Home extends Component {
                                                                             <div className="CommentSection">
                                                                                 {
                                                                                     this.props.commentsList[Object.keys(commentsList)[commentsValue - 1]].map(comment => {
-                                                                                        interim++
+                                                                                        post++
                                                                                         return <div
-                                                                                            key={post.id + interim}>
+                                                                                            key={post.id + post}>
                                                                                             <span
-                                                                                                className="bold">{interimusername}:</span>
+                                                                                                className="bold">{postusername}:</span>
                                                                                             <span>{comment}</span>
                                                                                         </div>
                                                                                     })

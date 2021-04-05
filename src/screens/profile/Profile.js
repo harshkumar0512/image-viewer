@@ -42,7 +42,7 @@ class Profile extends Component {
             newName: "",
             updatedNameRequired: "dispNone",
             comment: "",
-            interimComment: props.commentsList,
+            postComment: props.commentsList,
             comments: ["", "", "", "", "", "", "", ""],
             liked: false,
             loggedIn
@@ -92,25 +92,25 @@ class Profile extends Component {
     }
 
     NewCommentHandler = (pos, e) => {
-        let interim = this.state.comments
-        interim[pos] = e.target.value
-        this.setState({comments: interim})
+        let post = this.state.comments
+        post[pos] = e.target.value
+        this.setState({comments: post})
     }
 
     addNewComment = (pos) => {
         if (this.state.comments[pos].trim() !== "") {
             this.props.addNewComments(pos, this.state.comments[pos])
         }
-        let interim = this.state.comments
-        interim[pos] = ""
-        this.setState({comments: interim})
+        let post = this.state.comments
+        post[pos] = ""
+        this.setState({comments: post})
     }
 
     render() {
 
-        let interim = 0
-        let interimsrc
-        let interimUsername
+        let post = 0
+        let postsrc
+        let postUsername
         let likeNumber
         let counter = 0
         let likeStatus
@@ -210,13 +210,13 @@ class Profile extends Component {
                                                 counter++
                                                 this.props.postDetails.forEach(thispost => {
                                                     if (post.id === thispost.id) {
-                                                        interimsrc = thispost.media_url
-                                                        interimUsername = thispost.username
+                                                        postsrc = thispost.media_url
+                                                        postUsername = thispost.username
                                                     }
                                                 })
                                                 return <GridListTile key={post.id} className="GridTile">
-                                                    <img src={interimsrc} alt={post.caption}
-                                                         onClick={this.openPostModel.bind(this, post.caption, interimsrc, interimUsername, likeNumber, likeStatus, counter - 1)}/>
+                                                    <img src={postsrc} alt={post.caption}
+                                                         onClick={this.openPostModel.bind(this, post.caption, postsrc, postUsername, likeNumber, likeStatus, counter - 1)}/>
                                                 </GridListTile>
                                             })}
                                         </GridList>
@@ -248,9 +248,9 @@ class Profile extends Component {
                                                         <div className="TagsSection">
                                                             {
                                                                 this.props.tagsList[Object.keys(this.props.tagsList)[this.state.counter]].map(tag => {
-                                                                    interim++
+                                                                    post++
                                                                     return <span
-                                                                        key={"tag" + interim}>{tag}&nbsp;</span>
+                                                                        key={"tag" + post}>{tag}&nbsp;</span>
                                                                 })
                                                             }
                                                         </div>
@@ -260,8 +260,8 @@ class Profile extends Component {
                                                                     <div className="ExistingComments">
                                                                         {
                                                                             this.props.commentsList[Object.keys(this.props.commentsList)[this.state.counter]].map(comment => {
-                                                                                interim++
-                                                                                return <div key={interim}>
+                                                                                post++
+                                                                                return <div key={post}>
                                                                                     <span
                                                                                         className="bold">{this.state.username}:</span>
                                                                                     <span>{comment}</span>
@@ -312,7 +312,9 @@ class Profile extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>} </div>
+                    </div>
+                } 
+            </div>
         )
     }
 }
