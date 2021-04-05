@@ -1,307 +1,209 @@
 import React, { Component } from 'react';
 import './Home.css';
-import Login from '../../screens/login/Login';
-import { withStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
+import Header from '../../common/header/Header';
 import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import logo from '../../assets/logo.svg';
+import Avatar from '@material-ui/core/Avatar';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import Favorite from '@material-ui/icons/Favorite';
 import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import logo from '../../assets/logo.svg';
+import Typography from '@material-ui/core/Typography';
+import { Redirect } from 'react-router-dom';
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
 
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper
-    },
-    upcomingMoviesHeading: {
-        textAlign: 'center',
-        background: '#ff9999',
-        padding: '8px',
-        fontSize: '1rem'
-    },
-    images: {
-        flexWrap: 'nowrap',
-        transform: 'translateZ(0)',
-        width: '100%'
-    },
-    gridListMain: {
-        transform: 'translateZ(0)',
-        cursor: 'pointer'
-    },
-    formControl: {
-        margin: theme.spacing.unit,
-        minWidth: 240,
-        maxWidth: 240
-    },
-    title: {
-        color: theme.palette.primary.light,
-    }
-});
+const accessToken = sessionStorage.getItem("access-token");
 
 class Home extends Component {
-
     constructor() {
         super();
+        let loggedIn = true
+        if (accessToken === null) {
+            loggedIn = false
+        }
         this.state = {
-            imageName: "",
-            caption: [],
-            comments: [],
-            likes: "",
-            postedDate: "",
-            poster_url: ""
+            liked: false,
+            comment: "",
+            comments: ["", "", "", "", "", "", "", ""],
+            loggedIn
         }
     }
 
-    componentWillMount() {
-        // Get upcoming movies
-        let data = null;
-        let xhr = new XMLHttpRequest();
-        let that = this;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    upcomingMovies: JSON.parse(this.responseText).movies
-                });
-            }
-        });
-
-        xhr.open("GET", this.props.baseUrl + "movies?status=PUBLISHED");
-        xhr.setRequestHeader("Cache-Control", "no-cache");
-        xhr.send(data);
-
-        // Get released movies
-        let dataReleased = null;
-        let xhrReleased = new XMLHttpRequest();
-        xhrReleased.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    releasedMovies: JSON.parse(this.responseText).movies
-                });
-            }
-        });
-
-        xhrReleased.open("GET", this.props.baseUrl + "movies?status=RELEASED");
-        xhrReleased.setRequestHeader("Cache-Control", "no-cache");
-        xhrReleased.send(dataReleased);
-
-        // Get filters
-        let dataGenres = null;
-        let xhrGenres = new XMLHttpRequest();
-        xhrGenres.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    genresList: JSON.parse(this.responseText).genres
-                });
-            }
-        });
-
-        xhrGenres.open("GET", this.props.baseUrl + "genres");
-        xhrGenres.setRequestHeader("Cache-Control", "no-cache");
-        xhrGenres.send(dataGenres);
-
-        // Get artists
-        let dataArtists = null;
-        let xhrArtists = new XMLHttpRequest();
-        xhrArtists.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    artistsList: JSON.parse(this.responseText).artists
-                });
-            }
-        });
-
-        xhrArtists.open("GET", this.props.baseUrl + "artists");
-        xhrArtists.setRequestHeader("Cache-Control", "no-cache");
-        xhrArtists.send(dataArtists);
+    likeClickhandler = (id) => {
+        this.props.updatedLikeDetails(id)
     }
 
-    movieNameChangeHandler = event => {
-        this.setState({ movieName: event.target.value });
+    commentChangeHandler = (pos, e) => {
+        let interim = this.state.comments
+        interim[pos] = e.target.value
+        this.setState({ comments: interim })
     }
 
-    genreSelectHandler = event => {
-        this.setState({ genres: event.target.value });
-    }
-
-    artistSelectHandler = event => {
-        this.setState({ artists: event.target.value });
-    }
-
-    releaseDateStartHandler = event => {
-        this.setState({ releaseDateStart: event.target.value });
-    }
-
-    releaseDateEndHandler = event => {
-        this.setState({ releaseDateEnd: event.target.value });
-    }
-
-    movieClickHandler = (movieId) => {
-        this.props.history.push('/movie/' + movieId);
-    }
-
-    filterApplyHandler = () => {
-        let queryString = "?status=RELEASED";
-        if (this.state.movieName !== "") {
-            queryString += "&title=" + this.state.movieName;
+    addComment = (pos) => {
+        if (this.state.comments[pos].trim() !== "") {
+            this.props.addNewComments(pos, this.state.comments[pos])
         }
-        if (this.state.genres.length > 0) {
-            queryString += "&genres=" + this.state.genres.toString();
-        }
-        if (this.state.artists.length > 0) {
-            queryString += "&artists=" + this.state.artists.toString();
-        }
-        if (this.state.releaseDateStart !== "") {
-            queryString += "&start_date=" + this.state.releaseDateStart;
-        }
-        if (this.state.releaseDateEnd !== "") {
-            queryString += "&end_date=" + this.state.releaseDateEnd;
-        }
-
-        let that = this;
-        let dataFilter = null;
-        let xhrFilter = new XMLHttpRequest();
-        xhrFilter.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    releasedMovies: JSON.parse(this.responseText).imageName
-                });
-            }
-        });
-
-        xhrFilter.open("GET", this.props.baseUrl + "movies" + encodeURI(queryString));
-        xhrFilter.setRequestHeader("Cache-Control", "no-cache");
-        xhrFilter.send(dataFilter);
+        let interim = this.state.comments
+        interim[pos] = ""
+        this.setState({ comments: interim })
     }
 
     render() {
-        const { classes } = this.props;
+
+        let interim = 0
+
+        let interimusername = ""
+        let interimSrc
+        let interimTimeStamp
+        let interimDate
+        let interimMonth
+        let interimYear
+        let interimHour
+        let interimMin
+        let interimSec
+        let likeNumber
+        let counter = 0
+        let commentsValue = 0
+        let tagValue = 0
+        let commentsList = this.props.commentsList
+        let tagsList = this.props.tagsList
+
+        let displayPosts
+
+        this.props.showFilteredPosts ? displayPosts = this.props.filteredPosts : displayPosts = this.props.posts
+
         return (
             <div>
-                <Login baseUrl={this.props.baseUrl} />
-
-                <header className="home-app-header">
-                    <div className="app-logo-text"><span>Image Viewer</span></div>
-                    <img src={logo} className="app-logo" alt="Movies App Logo" />
-                    <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                        <Input id="movieName" onChange={this.movieNameChangeHandler} />
-                    </FormControl>
-                    <FormControl className={classes.formControl}>
-                        <Button onClick={() => this.filterApplyHandler()} variant="contained" color="primary">
-                            APPLY
-                        </Button>
-                    </FormControl>
-                </header>
-
-                <div className="flex-container">
-                    <div className="left">
-                        <GridList cellHeight={350} cols={2} className={classes.gridListMain}>
-                            {this.state.imageName.map(img => (
-                                <GridListTile onClick={() => this.movieClickHandler(img.id)} className="released-movie-grid-item" key={"grid" + img.id}>
-                                    <img src={img.poster_url} className="movie-poster" alt={img.title} />
-                                    <GridListTileBar
-                                        title={img.title}
-                                        subtitle={<span>Release Date: {new Date(img.postedDate).toDateString()}</span>}
-                                    />
-                                </GridListTile>
-                            ))}
-                        </GridList>
-                    </div>
-                    <div className="right">
-                        <Card>
-                            <CardContent>
-                                <FormControl className={classes.formControl}>
-                                    <Typography className={classes.title} color="textSecondary">
-                                        FIND MOVIES BY:
-                                    </Typography>
-                                </FormControl>
-
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                                    <Input id="movieName" onChange={this.movieNameChangeHandler} />
-                                </FormControl>
-
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel htmlFor="select-multiple-checkbox">Genres</InputLabel>
-                                    <Select
-                                        multiple
-                                        input={<Input id="select-multiple-checkbox-genre" />}
-                                        renderValue={selected => selected.join(',')}
-                                        value={this.state.genres}
-                                        onChange={this.genreSelectHandler}
-                                    >
-                                        {this.state.genresList.map(genre => (
-                                            <MenuItem key={genre.id} value={genre.genre}>
-                                                <Checkbox checked={this.state.genres.indexOf(genre.genre) > -1} />
-                                                <ListItemText primary={genre.genre} />
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel htmlFor="select-multiple-checkbox">Artists</InputLabel>
-                                    <Select
-                                        multiple
-                                        input={<Input id="select-multiple-checkbox" />}
-                                        renderValue={selected => selected.join(',')}
-                                        value={this.state.artists}
-                                        onChange={this.artistSelectHandler}
-                                    >
-                                        {this.state.artistsList.map(artist => (
-                                            <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
-                                                <Checkbox checked={this.state.artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />
-                                                <ListItemText primary={artist.first_name + " " + artist.last_name} />
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <FormControl className={classes.formControl}>
-                                    <TextField
-                                        id="releaseDateStart"
-                                        label="Release Date Start"
-                                        type="date"
-                                        defaultValue=""
-                                        InputLabelProps={{ shrink: true }}
-                                        onChange={this.releaseDateStartHandler}
-                                    />
-                                </FormControl>
-
-                                <FormControl className={classes.formControl}>
-                                    <TextField
-                                        id="releaseDateEnd"
-                                        label="Release Date End"
-                                        type="date"
-                                        defaultValue=""
-                                        InputLabelProps={{ shrink: true }}
-                                        onChange={this.releaseDateEndHandler}
-                                    />
-                                </FormControl>
-                                <br /><br />
-                                <FormControl className={classes.formControl}>
-                                    <Button onClick={() => this.filterApplyHandler()} variant="contained" color="primary">
-                                        APPLY
-                                    </Button>
-                                </FormControl>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
-            </div >
+                {this.state.loggedIn === false ?
+                    <Redirect to="/" />
+                    :
+                    <div className="mainContainer">
+                        <Header dispalySearchBar={true}
+                                displayUserProfileIcon={true}
+                                filterCaptions={this.props.filterCaptionsBySearch}
+                        />
+                        <div className="HomePage">
+                            <div className="homeMain">
+                                {/*<div className="CardContainer">*/}
+                                <GridList cellHeight={"auto"} className="CardContainer" cols={2} spacing={2}>
+                                    {
+                                        displayPosts.map(post => {
+                                            likeNumber = this.props.likeList[counter]
+                                            counter++
+                                            this.props.postDetails.forEach(thispost => {
+                                                if (thispost.id === post.id) {
+                                                    interimusername = thispost.username
+                                                    interimSrc = thispost.media_url
+                                                    interimTimeStamp = new Date(thispost.timestamp)
+                                                    interimDate = interimTimeStamp.getDate()
+                                                    interimMonth = interimTimeStamp.getMonth() + 1
+                                                    interimYear = interimTimeStamp.getFullYear()
+                                                    interimHour = interimTimeStamp.getHours()
+                                                    interimMin = interimTimeStamp.getMinutes()
+                                                    interimSec = interimTimeStamp.getSeconds()
+                                                }
+                                            });
+                                            return <GridListTile key={post.id}>
+                                                <Card key={post.id} id={post.id} className="cardStyle">
+                                                    <div>
+                                                        <CardHeader className="CardHead" avatar={
+                                                            <Avatar className="CardHeadAvatar" src={logo} sizes="small" />
+                                                        }
+                                                                    title={interimusername}
+                                                                    subheader={interimDate + "/" + interimMonth + "/" + interimYear + " " + interimHour + ":" + interimMin + ":" + interimSec} />
+                                                    </div>
+                                                    <div className="CardContent">
+                                                        <CardContent>
+                                                            <div className="CardContentImage">
+                                                                <img className="image" src={interimSrc}
+                                                                     alt={post.caption} />
+                                                            </div>
+                                                            < hr />
+                                                            <div className="ImageDetails">
+                                                                <div className="Caption"><Typography
+                                                                    variant="h5">{post.caption}</Typography></div>
+                                                                <div className="Tags" {...tagValue++}>
+                                                                    {
+                                                                        this.props.tagsList[Object.keys(tagsList)[tagValue - 1]].map(tag => {
+                                                                            interim++
+                                                                            return <span
+                                                                                key={"tag" + interim}>{tag}&nbsp;</span>
+                                                                        })
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                {
+                                                                    this.props.likeDetails[counter - 1] ?
+                                                                        <div className="PostLikeSection"><Favorite
+                                                                            id={2}
+                                                                            style={{ color: "red" }}
+                                                                            className="likeButton"
+                                                                            onClick={this.likeClickhandler.bind(this, counter - 1)} /><span>{likeNumber + 1} likes</span>
+                                                                        </div> :
+                                                                        <div className="PostLikeSection">
+                                                                            <FavoriteBorderIcon
+                                                                                id={2} className="PostLikeButton"
+                                                                                onClick={this.likeClickhandler.bind(this, counter - 1)} /><span>{likeNumber} likes</span>
+                                                                        </div>
+                                                                }
+                                                            </div>
+                                                            <div className="PostCommentSection">
+                                                                {
+                                                                    <div {...commentsValue++}>
+                                                                        <div id="comments" className="Comments">
+                                                                            <div className="CommentSection">
+                                                                                {
+                                                                                    this.props.commentsList[Object.keys(commentsList)[commentsValue - 1]].map(comment => {
+                                                                                        interim++
+                                                                                        return <div
+                                                                                            key={post.id + interim}>
+                                                                                            <span
+                                                                                                className="bold">{interimusername}:</span>
+                                                                                            <span>{comment}</span>
+                                                                                        </div>
+                                                                                    })
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="NewComment">
+                                                                            <FormControl className="commentInput">
+                                                                                <InputLabel
+                                                                                    htmlFor={"input" + commentsValue}>Add
+                                                                                    a
+                                                                                    comment</InputLabel>
+                                                                                <Input id={"input" + commentsValue}
+                                                                                       type="text"
+                                                                                       value={this.state.comments[commentsValue - 1]}
+                                                                                       onChange={this.commentChangeHandler.bind(this, commentsValue - 1)} />
+                                                                            </FormControl>
+                                                                            <Button className="AddNewComment"
+                                                                                    variant="contained" color="primary"
+                                                                                    onClick={this.addComment.bind(this, commentsValue - 1)}>
+                                                                                ADD
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </CardContent>
+                                                    </div>
+                                                </Card>
+                                            </GridListTile>
+                                        })
+                                    }
+                                </GridList>
+                                {/* </div> */}
+                            </div>
+                        </div>
+                    </div>} </div>
         )
     }
 }
 
-export default withStyles(styles)(Home);
+export default Home;

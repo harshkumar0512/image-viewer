@@ -1,58 +1,87 @@
-::-webkit-scrollbar {
-    width: 4px;
+.mainContainer {
+    width: 100%;
 }
 
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
-    border-radius: 4px;
+.HomePage {
+    padding-top: 64px;
 }
 
-::-webkit-scrollbar-thumb {
-    background: grey;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: grey;
-}
-
-.movie-poster {
-    height: 100%;
-    width: auto;
-}
-
-.flex-container {
+.homeMain {
+    padding: 10px;
+    margin-bottom: 20px;
     display: flex;
+    justify-content: space-around;
 }
 
-.flex-container>div {
-    margin: 16px;
+.CardContainer {
+    /*padding-left: 5%;*/
+    /*padding-right: 5%;*/
+    margin-left: 20px;
+    min-width: 1280px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
 }
 
-.left {
-    width: 76%;
+.cardStyle {
+    width: 600px;
+    display: inline-block;
+    flex-direction: column;
+    margin: 20px;
+    min-width: 500px;
 }
 
-.right {
-    padding-top: 20px;
-    width: 24%;
+.image {
+    height: 500px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
-.released-movie-grid-item {
-    margin: 15px;
+.PostLikeSection {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: baseline;
 }
 
-@media (max-width: 992px) {
-    .flex-container {
-        flex-direction: column;
-    }
-    .left {
-        width: 100%;
-    }
-    .right {
-        width: 90%;
-    }
-    .released-movie-grid-item {
-        margin: 8px;
-    }
+.PostLikeButton {
+    margin-right: 10px;
+}
+
+.Tags {
+    color: #0095f6;
+}
+
+.NewComment {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    /*justify-content: baseline;*/
+    align-items: center;
+}
+
+.AddNewComment {
+    margin: 10px;
+    height: 35px;
+}
+
+.commentInput {
+    width: 80%;
+}
+
+.bold {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.Comments {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.CommentSection {
+    height: 100px;
+    overflow-y: auto;
 }
